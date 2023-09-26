@@ -1,11 +1,18 @@
 import PhoneBook from "./PhoneBook/PhoneBook";
-import React, {Component} from "react";
+import React, { Component } from "react";
+import { nanoid } from 'nanoid';
 
 export class App extends Component {
 
   handleAddContact = (contactData) => {
     console.log('contactData:', contactData)
+    this.setState(prevState => {
+      return {
+        name:[...prevState.contactData, name]
+      }
+})
   }
+ 
   render(){
     return (
       <div
