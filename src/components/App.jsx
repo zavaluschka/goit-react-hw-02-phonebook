@@ -1,31 +1,83 @@
 import PhoneBook from "./PhoneBook/PhoneBook";
 import React, { Component } from "react";
 import { nanoid } from 'nanoid';
+import { Filter } from "./PhoneBook/Filter";
+import { ContactList } from "./PhoneBook/ContactList";
 
 export class App extends Component {
+   state = {
+    contacts: [],
+    filter: '',
+  };
 
-  handleAddContact = (contactData) => {
-    console.log('contactData:', contactData)
-    this.setState(prevState => {
-      return {
-        name:[...prevState.contactData, name]
-      }
-})
+  handleAddContact = ({ event, name, number }) => {
+    event.preventDefault();
+    if (
+      this.state.contacts.some(
+        contact => contact.name === name || contact.number === number
+      )
+    ) {
+      alert('This contact alredy exist');
+      return;
+    }
+    this.setState(pervState => ({
+      contacts: [
+        { name: name, number: number, id: nanoid() },
+        ...pervState.contacts,
+      ],
+    }));
+  };
+   handleInput = event => {
+    this.setState({ [event.target.name]: event.target.value });
+    if ((event.target.name = 'filter')) {
+    }
+  };
+
+  
+  getFilteredContacts(filter) {
+    return this.state.contacts.filter(
+      contact =>
+        contact.name.toLowerCase().includes(filter.toLowerCase()) ||
+        contact.number.includes(filter)
+    );
   }
+
+  handleDelete = id => {
+    console.log();
+    this.setState(prevState => {
+      if (this.state.contacts.find(contact => contact.id === id)) {
+        prevState.contacts.splice(
+          this.state.contacts.indexOf(
+            this.state.contacts.find(contact => contact.id === id)
+          ),
+          1
+        );
+      }
+      return { contacts: prevState.contacts };
+    });
+  };
+
  
   render(){
     return (
       <div
-        style={{
-          height: '100vh',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          fontSize: 40,
-          color: '#010101'
-        }}
+        // style={{
+        //   height: '100vh',
+        //   display: 'flex',
+        //   justifyContent: 'center',
+        //   alignItems: 'center',
+        //   fontSize: 40,
+        //   color: '#010101'
+        // }}
       >
-        <PhoneBook handleAddContact={this.handleAddContact } />
+        <PhoneBook handleAddContact={this.handleAddContact}
+        state={this.state}
+          handleInput={this.handleInput} />
+        <Filter handleInput={this.handleInput}
+           state={this.state}
+        />
+        <ContactList contacts={this.getFilteredContacts(this.state.filter)}
+          handleDelete={this.handleDelete}/>
       
       </div>
     );

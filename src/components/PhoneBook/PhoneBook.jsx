@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import css from './PhoneBook.module.css'
 
 export default class PhoneBook extends Component {
   state = {
@@ -10,21 +11,11 @@ export default class PhoneBook extends Component {
             [event.target.name]: event.target.value
         })
     }
-    handleSubmit = event => {
-        event.preventDefault();
-        const contactData = this.state.name 
-        this.props.handleAddContact(contactData)
-        this.setState(
-            {
-                number: '',
-                name: ''
-            }
-        )
-    }
+    
   render() {
     return (
         <div>
-            <form onSubmit={event => {
+        <form className={ css.form} onSubmit={event => {
           this.setState({ name: '', number: '' });
 
           this.props.handleAddContact({
@@ -34,16 +25,16 @@ export default class PhoneBook extends Component {
           });
         }}
             >
-                <h2>Phonebook</h2>
-                <label>
+                <h2 className={css.title}>Phonebook</h2>
+                <label className={css.label}>
                     Name
-                    <input onChange={this.handleInputChange} value={this.state.name} name="name" type="text" required/>
+                    <input className={css.input} onChange={this.handleInputChange} value={this.state.name} name="name" type="text" required/>
                 </label>
-                <label>
+                <label className={css.label}>
                     Number
-                    <input onChange={this.handleInputChange} value={this.state.number} name="number" type="tel" required/>
+                    <input className={css.input}  onChange={this.handleInputChange} value={this.state.number} name="number" type="tel" required/>
                 </label>
-                <button type="submite">add contact</button>
+          <button className={css.btn} type="submite">add contact</button>
         </form>
       </div>
     )
